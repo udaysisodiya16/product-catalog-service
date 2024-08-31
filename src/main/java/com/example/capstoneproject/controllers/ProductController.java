@@ -5,6 +5,8 @@ import com.example.capstoneproject.dtos.ProductDto;
 import com.example.capstoneproject.model.Category;
 import com.example.capstoneproject.model.Product;
 import com.example.capstoneproject.services.IProductService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,6 +20,8 @@ import java.util.List;
 @RestController
 @RequestMapping("/products")
 public class ProductController {
+
+    private static final Logger log = LoggerFactory.getLogger(ProductController.class);
 
     @Autowired
     private IProductService productService;
@@ -77,6 +81,7 @@ public class ProductController {
             Category category = new Category();
             category.setId(productDto.getCategory().getId());
             category.setName(productDto.getCategory().getName());
+            category.setDescription(productDto.getCategory().getDescription());
             product.setCategory(category);
         }
         return product;
@@ -93,6 +98,7 @@ public class ProductController {
             CategoryDto category = new CategoryDto();
             category.setId(product.getCategory().getId());
             category.setName(product.getCategory().getName());
+            category.setDescription(product.getCategory().getDescription());
             productDto.setCategory(category);
         }
         return productDto;

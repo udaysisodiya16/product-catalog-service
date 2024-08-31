@@ -20,5 +20,4 @@ public abstract class BaseModel {
 
     private Status status;
 
-    //private UUID uuidId = UUID.randomUUID();
 }

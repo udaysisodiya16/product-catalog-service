@@ -18,12 +18,7 @@ public class StorageProductService implements IProductService {
     @Override
     public Product getProductById(Long id) {
         Optional<Product> optionalProduct = productRepo.findById(id);
-
-        if(optionalProduct.isPresent()) {
-            return optionalProduct.get();
-        }
-
-        return null;
+        return optionalProduct.orElse(null);
     }
 
     @Override
@@ -33,11 +28,12 @@ public class StorageProductService implements IProductService {
 
     @Override
     public List<Product> getAllProducts() {
-        return null;
+        return productRepo.findAll();
     }
 
     @Override
     public Product replaceProduct(Product product, Long id) {
-        return null;
+        productRepo.findById(id).orElseThrow(() -> new IllegalArgumentException("Invalid Id"));
+        return productRepo.save(product);
     }
 }
