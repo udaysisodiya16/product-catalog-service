@@ -1,123 +1,115 @@
 package com.example.capstoneproject.controllers;
 
 import com.example.capstoneproject.dtos.ProductDto;
-import com.example.capstoneproject.mappers.ProductMapper;
+import com.example.capstoneproject.model.Category;
 import com.example.capstoneproject.model.Product;
 import com.example.capstoneproject.services.IProductService;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.mapstruct.factory.Mappers;
+import org.mockito.ArgumentCaptor;
+import org.mockito.Captor;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.http.MediaType;
-import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.http.ResponseEntity;
 
-import java.util.Arrays;
-import java.util.List;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
 
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
-
-@WebMvcTest(ProductController.class)
-public class ProductControllerTest {
+@SpringBootTest
+class ProductControllerTest {
 
     @Autowired
-    private MockMvc mockMvc;
+    private ProductController productController;
 
     @MockBean
     private IProductService productService;
 
-    //object <-> json <-> string
-    @Autowired
-    private ObjectMapper objectMapper;
-
-    private final ProductMapper productMapper = Mappers.getMapper(ProductMapper.class);
+    @Captor
+    private ArgumentCaptor<Long> idCaptor;
 
     @Test
-    public void Test_GetAllProductsAPI_TestsStatusOnly() throws Exception {
-        mockMvc.perform(get("/products"))
-                .andExpect(status().isOk());
+    public void Test_GetProductById_WithValidId_ReturnsProductSuccessfully() {
+        //Arrange
+        Long productId = 9999999999L;
+        Product product = new Product();
+        product.setId(productId);
+        product.setName("Iphone12");
+        product.setPrice(100000D);
+        Category category = new Category();
+        category.setId(2L);
+        category.setName("iPHONES");
+        product.setCategory(category);
+       when(productService.getProductById(productId)).thenReturn(product);
+
+        //Act
+        ResponseEntity<ProductDto> response = productController.getProductById(productId);
+
+        //Assert
+        assertNotNull(response);
+        assertEquals(response.getBody().getName(),"Iphone12");
+        assertEquals(response.getBody().getId(),productId);
+        verify(productService,times(1)).getProductById(productId);
     }
 
     @Test
-    public void Test_GetAllProductsAPI_TestsContentAndStatus() throws Exception {
-
-        //Arrange
-        Product product1 = new Product();
-        product1.setName("Iphone12");
-        Product product2 = new Product();
-        product2.setName("Iphone15");
-        List<Product> productList = Arrays.asList(product1, product2);
-        when(productService.getAllProducts()).thenReturn(productList);
-
+    public void Test_GetProductById_WithInvalidId_ThrowsIllegalArgumentException() {
         //Act and Assert
-        mockMvc.perform(get("/products"))
-                .andExpect(status().isOk())
-                .andExpect(content().string(objectMapper.writeValueAsString(productMapper.productsToProductDtos(productList))));
+        Exception exception = assertThrows(IllegalArgumentException.class,
+                () -> productController.getProductById(-1L));
+
+        assertEquals("Are you crazy ?",exception.getMessage());
+
+        verify(productService,times(0)).getProductById(-1L);
     }
 
     @Test
-    public void Test_GetAllProductsAPI_TestsContentAndStatus_AssertInJson() throws Exception {
-
+    public void Test_GetProductById_ProductServiceThrowsException() {
         //Arrange
-        Product product1 = new Product();
-        product1.setName("Iphone12");
-        Product product2 = new Product();
-        product2.setName("Iphone15");
-        List<Product> productList = Arrays.asList(product1, product2);
-        when(productService.getAllProducts()).thenReturn(productList);
+        Long productId = 2L;
+        when(productService.getProductById(productId)).
+                thenThrow(new RuntimeException("something went bad !!"));
 
-        //Act and Assert
-        mockMvc.perform(get("/products"))
-                .andExpect(status().isOk())
-                .andExpect(content().string(objectMapper.writeValueAsString(productMapper.productsToProductDtos(productList))))
-                .andExpect(jsonPath("$[0].name").value("Iphone12"))
-                .andExpect(jsonPath("$[1].name").value("Iphone15"))
-                .andExpect(jsonPath("$.length()").value(2));
+        assertThrows(Exception.class,() -> productController.getProductById(productId));
     }
 
     @Test
-    public void Test_CreateProduct_ProductCreatedSuccessfully() throws Exception {
-        //Arrange
+    public void Test_CreateProduct_ValidPayload_RunsSuccessfully() {
+       //Arrange
         ProductDto productDto = new ProductDto();
-        productDto.setName("MacBook");
-        productDto.setId(10L);
+        productDto.setId(1L);
+        productDto.setName("Iphone12");
+        productDto.setPrice(100000D);
 
         Product product = new Product();
-        product.setName("MacBook");
-        product.setId(10L);
-
+        product.setId(1L);
+        product.setName("Iphone12");
+        product.setPrice(100000D);
         when(productService.createProduct(any(Product.class))).thenReturn(product);
 
-        //Act and Assert
-        mockMvc.perform(post("/products")
-                        .content(objectMapper.writeValueAsString(productDto))
-                        .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk())
-                .andExpect(content().string(objectMapper.writeValueAsString(productDto)));
+        //Act
+        ProductDto response = productController.createProduct(productDto);
 
+        //Assert
+        assertNotNull(response);
+        assertEquals("Iphone12",response.getName());
     }
 
+    @DisplayName("Passing product id as 1 to controller and expect same on product service call as well, if this assert fails, that means value was not 1")
     @Test
-    public void Test_CreateProduct_ProductCreatedSuccessfully_AssertInJsons() throws Exception {
+    public void Test_GetProductById_ServiceCalledWithExpectedArguments_RunSuccessfully() {
         //Arrange
-        ProductDto productDto = new ProductDto();
-        productDto.setName("MacBook");
-        productDto.setId(10L);
+        Long productId = 1L;
+        Product product =new Product();
+        product.setId(productId);
 
-        when(productService.createProduct(any(Product.class))).thenReturn(productMapper.productDtoToProduct(productDto));
+        when(productService.getProductById(any(Long.class))).thenReturn(product);
 
-        //Act and Assert
-        mockMvc.perform(post("/products")
-                        .content(objectMapper.writeValueAsString(productDto))
-                        .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk())
-                .andExpect(content().string(objectMapper.writeValueAsString(productDto)))
-                .andExpect(jsonPath("$.name").value("MacBook"))
-                .andExpect(jsonPath("$.id").value(10));
+        //Act
+        productController.getProductById(productId);
+
+        //Assert
+        verify(productService).getProductById(idCaptor.capture());
+        assertEquals(productId,idCaptor.getValue());
     }
 }
