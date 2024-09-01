@@ -1,10 +1,10 @@
 package com.example.capstoneproject.controllers;
 
-import com.example.capstoneproject.dtos.CategoryDto;
 import com.example.capstoneproject.dtos.ProductDto;
-import com.example.capstoneproject.model.Category;
+import com.example.capstoneproject.mappers.ProductMapper;
 import com.example.capstoneproject.model.Product;
 import com.example.capstoneproject.services.IProductService;
+import org.mapstruct.factory.Mappers;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,7 +14,6 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -26,15 +25,12 @@ public class ProductController {
     @Autowired
     private IProductService productService;
 
+    private final ProductMapper productMapper = Mappers.getMapper(ProductMapper.class);
+
     @GetMapping
     public List<ProductDto> getProducts() {
-        List<ProductDto> response = new ArrayList<>();
         List<Product> products = productService.getAllProducts();
-        for (Product product : products) {
-            response.add(getProductDto(product));
-        }
-
-        return response;
+        return productMapper.productsToProductDtos(products);
     }
 
     @GetMapping("{id}")
@@ -47,7 +43,7 @@ public class ProductController {
             }
 
             Product product = productService.getProductById(productId);
-            ProductDto productDto = getProductDto(product);
+            ProductDto productDto = productMapper.productToProductDto(product);
             MultiValueMap<String, String> headers = new LinkedMultiValueMap<>();
             headers.add("called By", "Anurag Khanna");
             return new ResponseEntity<>(productDto, headers, HttpStatus.OK);
@@ -58,49 +54,15 @@ public class ProductController {
 
     @PostMapping
     public ProductDto createProduct(@RequestBody ProductDto productDto) {
-        Product product = getProduct(productDto);
+        Product product = productMapper.productDtoToProduct(productDto);
         Product result = productService.createProduct(product);
-        return getProductDto(result);
+        return productMapper.productToProductDto(result);
     }
 
     @PutMapping("{id}")
     public ProductDto replaceProduct(@PathVariable Long id, @RequestBody ProductDto productDto) {
-        Product input = getProduct(productDto);
+        Product input = productMapper.productDtoToProduct(productDto);
         Product product = productService.replaceProduct(input, id);
-        return getProductDto(product);
-    }
-
-    private Product getProduct(ProductDto productDto) {
-        Product product = new Product();
-        product.setId(productDto.getId());
-        product.setName(productDto.getName());
-        product.setPrice(productDto.getPrice());
-        product.setImageUrl(productDto.getImageUrl());
-        product.setDescription(productDto.getDescription());
-        if (productDto.getCategory() != null) {
-            Category category = new Category();
-            category.setId(productDto.getCategory().getId());
-            category.setName(productDto.getCategory().getName());
-            category.setDescription(productDto.getCategory().getDescription());
-            product.setCategory(category);
-        }
-        return product;
-    }
-
-    private ProductDto getProductDto(Product product) {
-        ProductDto productDto = new ProductDto();
-        productDto.setId(product.getId());
-        productDto.setName(product.getName());
-        productDto.setPrice(product.getPrice());
-        productDto.setImageUrl(product.getImageUrl());
-        productDto.setDescription(product.getDescription());
-        if (product.getCategory() != null) {
-            CategoryDto category = new CategoryDto();
-            category.setId(product.getCategory().getId());
-            category.setName(product.getCategory().getName());
-            category.setDescription(product.getCategory().getDescription());
-            productDto.setCategory(category);
-        }
-        return productDto;
+        return productMapper.productToProductDto(product);
     }
 }
