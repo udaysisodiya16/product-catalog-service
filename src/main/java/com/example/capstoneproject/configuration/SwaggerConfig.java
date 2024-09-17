@@ -2,15 +2,14 @@ package com.example.capstoneproject.configuration;
 
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.info.Info;
+import io.swagger.v3.oas.models.servers.Server;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import springfox.documentation.builders.PathSelectors;
-import springfox.documentation.builders.RequestHandlerSelectors;
-import springfox.documentation.spi.DocumentationType;
-import springfox.documentation.spring.web.plugins.Docket;
+
+import java.util.Arrays;
 
 @Configuration
 public class SwaggerConfig {
@@ -19,17 +18,6 @@ public class SwaggerConfig {
 
     @Value("${swagger.url}")
     private String swaggerUrl;
-
-    public static final String API_PACKAGE = "com.example.capstoneproject.controllers";
-
-    @Bean
-    public Docket api() {
-        return new Docket(DocumentationType.SWAGGER_2)
-                .select()
-                .apis(RequestHandlerSelectors.basePackage(API_PACKAGE))
-                .paths(PathSelectors.any())
-                .build();
-    }
 
     @Bean
     public OpenAPI customOpenAPI() {
