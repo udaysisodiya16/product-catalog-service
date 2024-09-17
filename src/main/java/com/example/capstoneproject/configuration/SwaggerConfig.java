@@ -9,7 +9,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import java.util.Arrays;
+import java.util.List;
 
 @Configuration
 public class SwaggerConfig {
@@ -21,10 +21,14 @@ public class SwaggerConfig {
 
     @Bean
     public OpenAPI customOpenAPI() {
+        Server server = new Server();
+        server.setUrl(swaggerUrl);
+        server.setDescription("Server URL");
         return new OpenAPI()
                 .info(new Info()
-                        .title("My API")
+                        .title("Capstone Project APIs")
                         .version("1.0")
-                        .description("This is a sample Spring Boot RESTful service using springdoc-openapi and OpenAPI 3."));
+                        .description("This is a sample Spring Boot RESTful service using springdoc-openapi-starter-webmvc-ui."))
+                .servers(List.of(server));
     }
 }
