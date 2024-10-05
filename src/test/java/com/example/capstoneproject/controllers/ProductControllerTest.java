@@ -17,7 +17,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 @SpringBootTest
-class ProductControllerTest {
+public class ProductControllerTest {
 
     @Autowired
     private ProductController productController;
@@ -40,16 +40,16 @@ class ProductControllerTest {
         category.setId(2L);
         category.setName("iPHONES");
         product.setCategory(category);
-       when(productService.getProductById(productId)).thenReturn(product);
+        when(productService.getProductById(productId)).thenReturn(product);
 
         //Act
         ResponseEntity<ProductDto> response = productController.getProductById(productId);
 
         //Assert
         assertNotNull(response);
-        assertEquals(response.getBody().getName(),"Iphone12");
-        assertEquals(response.getBody().getId(),productId);
-        verify(productService,times(1)).getProductById(productId);
+        assertEquals("Iphone12", response.getBody().getName() );
+        assertEquals(response.getBody().getId(), productId);
+        verify(productService, times(1)).getProductById(productId);
     }
 
     @Test
@@ -58,9 +58,9 @@ class ProductControllerTest {
         Exception exception = assertThrows(IllegalArgumentException.class,
                 () -> productController.getProductById(-1L));
 
-        assertEquals("Are you crazy ?",exception.getMessage());
+        assertEquals("Are you crazy ?", exception.getMessage());
 
-        verify(productService,times(0)).getProductById(-1L);
+        verify(productService, times(0)).getProductById(-1L);
     }
 
     @Test
@@ -70,12 +70,12 @@ class ProductControllerTest {
         when(productService.getProductById(productId)).
                 thenThrow(new RuntimeException("something went bad !!"));
 
-        assertThrows(Exception.class,() -> productController.getProductById(productId));
+        assertThrows(Exception.class, () -> productController.getProductById(productId));
     }
 
     @Test
     public void Test_CreateProduct_ValidPayload_RunsSuccessfully() {
-       //Arrange
+        //Arrange
         ProductDto productDto = new ProductDto();
         productDto.setId(1L);
         productDto.setName("Iphone12");
@@ -92,7 +92,7 @@ class ProductControllerTest {
 
         //Assert
         assertNotNull(response);
-        assertEquals("Iphone12",response.getName());
+        assertEquals("Iphone12", response.getName());
     }
 
     @DisplayName("Passing product id as 1 to controller and expect same on product service call as well, if this assert fails, that means value was not 1")
@@ -100,7 +100,7 @@ class ProductControllerTest {
     public void Test_GetProductById_ServiceCalledWithExpectedArguments_RunSuccessfully() {
         //Arrange
         Long productId = 1L;
-        Product product =new Product();
+        Product product = new Product();
         product.setId(productId);
 
         when(productService.getProductById(any(Long.class))).thenReturn(product);
@@ -110,6 +110,6 @@ class ProductControllerTest {
 
         //Assert
         verify(productService).getProductById(idCaptor.capture());
-        assertEquals(productId,idCaptor.getValue());
+        assertEquals(productId, idCaptor.getValue());
     }
 }
