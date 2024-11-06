@@ -88,11 +88,11 @@ public class ProductControllerTest {
         when(productService.createProduct(any(Product.class))).thenReturn(product);
 
         //Act
-        ProductDto response = productController.createProduct(productDto);
+        ResponseEntity<ProductDto> responseEntity = productController.createProduct(productDto);
 
         //Assert
-        assertNotNull(response);
-        assertEquals("Iphone12", response.getName());
+        assertNotNull(responseEntity.getBody());
+        assertEquals("Iphone12", responseEntity.getBody().getName());
     }
 
     @DisplayName("Passing product id as 1 to controller and expect same on product service call as well, if this assert fails, that means value was not 1")
