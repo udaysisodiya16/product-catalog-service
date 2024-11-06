@@ -8,10 +8,7 @@ import org.mapstruct.factory.Mappers;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.util.LinkedMultiValueMap;
-import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -28,41 +25,35 @@ public class ProductController {
     private final ProductMapper productMapper = Mappers.getMapper(ProductMapper.class);
 
     @GetMapping
-    public List<ProductDto> getProducts() {
+    public ResponseEntity<List<ProductDto>> getProducts() {
         List<Product> products = productService.getAllProducts();
-        return productMapper.productsToProductDtos(products);
+        return ResponseEntity.ok(productMapper.productsToProductDtos(products));
     }
 
     @GetMapping("{id}")
     public ResponseEntity<ProductDto> getProductById(@PathVariable("id") Long productId) {
-        try {
-            if (productId == 0) {
-                throw new IllegalArgumentException("ProductId is invalid");
-            } else if (productId < 0) {
-                throw new IllegalArgumentException("Are you crazy ?");
-            }
-
-            Product product = productService.getProductById(productId);
-            ProductDto productDto = productMapper.productToProductDto(product);
-            MultiValueMap<String, String> headers = new LinkedMultiValueMap<>();
-            headers.add("called By", "Anurag Khanna");
-            return new ResponseEntity<>(productDto, headers, HttpStatus.OK);
-        } catch (IllegalArgumentException exception) {
-            throw exception;
+        if (productId == 0) {
+            throw new IllegalArgumentException("ProductId is invalid");
+        } else if (productId < 0) {
+            throw new IllegalArgumentException("Are you crazy ?");
         }
+
+        Product product = productService.getProductById(productId);
+        ProductDto productDto = productMapper.productToProductDto(product);
+        return ResponseEntity.ok(productDto);
     }
 
     @PostMapping
-    public ProductDto createProduct(@RequestBody ProductDto productDto) {
+    public ResponseEntity<ProductDto> createProduct(@RequestBody ProductDto productDto) {
         Product product = productMapper.productDtoToProduct(productDto);
         Product result = productService.createProduct(product);
-        return productMapper.productToProductDto(result);
+        return ResponseEntity.ok(productMapper.productToProductDto(result));
     }
 
     @PutMapping("{id}")
-    public ProductDto replaceProduct(@PathVariable Long id, @RequestBody ProductDto productDto) {
+    public ResponseEntity<ProductDto> replaceProduct(@PathVariable Long id, @RequestBody ProductDto productDto) {
         Product input = productMapper.productDtoToProduct(productDto);
         Product product = productService.replaceProduct(input, id);
-        return productMapper.productToProductDto(product);
+        return ResponseEntity.ok(productMapper.productToProductDto(product));
     }
 }
