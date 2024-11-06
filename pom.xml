@@ -8,11 +8,11 @@
         <version>3.3.3</version>
         <relativePath/>
     </parent>
-    <groupId>com.example</groupId>
-    <artifactId>CapstoneProject</artifactId>
+    <groupId>com.capstone</groupId>
+    <artifactId>productcatalogservice</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>CapstoneProject</name>
-    <description>Capstone Project for Spring Boot</description>
+    <name>product-catalog-service</name>
+    <description>Product Catalog Service</description>
     <url/>
     <licenses>
         <license/>
