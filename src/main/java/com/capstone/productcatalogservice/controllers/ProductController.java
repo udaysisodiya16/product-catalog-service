@@ -56,4 +56,10 @@ public class ProductController {
         Product product = productService.replaceProduct(input, id);
         return ResponseEntity.ok(productMapper.productToProductDto(product));
     }
+
+    @DeleteMapping("{id}")
+    public ResponseEntity<Boolean> deleteProduct(@PathVariable Long id) {
+        Boolean status = productService.deleteProduct(id);
+        return ResponseEntity.ok(status);
+    }
 }

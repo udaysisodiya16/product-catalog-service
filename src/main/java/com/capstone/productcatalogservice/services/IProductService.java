@@ -6,11 +6,13 @@ import java.util.List;
 
 public interface IProductService {
 
-    public Product getProductById(Long id);
+    Product getProductById(Long id);
 
-    public Product createProduct(Product product);
+    Product createProduct(Product product);
 
-    public List<Product> getAllProducts();
+    List<Product> getAllProducts();
 
-    public Product replaceProduct(Product product, Long id);
+    Product replaceProduct(Product product, Long id);
+
+    Boolean deleteProduct(Long id);
 }

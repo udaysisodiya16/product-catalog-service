@@ -23,7 +23,7 @@ public class StorageProductService implements IProductService {
 
     @Override
     public Product createProduct(Product product) {
-       return productRepo.save(product);
+        return productRepo.save(product);
     }
 
     @Override
@@ -35,5 +35,12 @@ public class StorageProductService implements IProductService {
     public Product replaceProduct(Product product, Long id) {
         productRepo.findById(id).orElseThrow(() -> new IllegalArgumentException("Invalid Id"));
         return productRepo.save(product);
+    }
+
+    @Override
+    public Boolean deleteProduct(Long id) {
+        Product product = productRepo.findById(id).orElseThrow(() -> new IllegalArgumentException("Invalid Id"));
+        productRepo.delete(product);
+        return true;
     }
 }
