@@ -8,6 +8,8 @@ import org.mapstruct.factory.Mappers;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -25,20 +27,19 @@ public class ProductController {
     private final ProductMapper productMapper = Mappers.getMapper(ProductMapper.class);
 
     @GetMapping
-    public ResponseEntity<List<ProductDto>> getProducts() {
+    public ResponseEntity<List<ProductDto>> getAllProducts() {
         List<Product> products = productService.getAllProducts();
         return ResponseEntity.ok(productMapper.productsToProductDtos(products));
     }
 
     @GetMapping("{id}")
-    public ResponseEntity<ProductDto> getProductById(@PathVariable("id") Long productId) {
+    public ResponseEntity<ProductDto> getProduct(@PathVariable("id") Long productId) {
         if (productId == 0) {
             throw new IllegalArgumentException("ProductId is invalid");
         } else if (productId < 0) {
             throw new IllegalArgumentException("Are you crazy ?");
         }
-
-        Product product = productService.getProductById(productId);
+        Product product = productService.getProduct(productId);
         ProductDto productDto = productMapper.productToProductDto(product);
         return ResponseEntity.ok(productDto);
     }
@@ -61,5 +62,15 @@ public class ProductController {
     public ResponseEntity<Boolean> deleteProduct(@PathVariable Long id) {
         Boolean status = productService.deleteProduct(id);
         return ResponseEntity.ok(status);
+    }
+
+    @GetMapping("/search")
+    public ResponseEntity<Page<ProductDto>> searchProducts(@RequestParam String searchKey,
+                                                           @RequestParam(defaultValue = "0") Integer pageNo,
+                                                           @RequestParam(defaultValue = "10") Integer pageSize,
+                                                           @RequestParam(defaultValue = "name") String sortBy,
+                                                           @RequestParam(defaultValue = "asc") String sortOrder) {
+        Page<Product> productPage = productService.searchProducts(searchKey, pageNo, pageSize, sortBy, sortOrder);
+        return ResponseEntity.ok(productPage.map(productMapper::productToProductDto));
     }
 }

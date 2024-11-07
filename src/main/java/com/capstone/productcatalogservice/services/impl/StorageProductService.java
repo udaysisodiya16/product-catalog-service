@@ -4,6 +4,10 @@ import com.capstone.productcatalogservice.models.Product;
 import com.capstone.productcatalogservice.repos.ProductRepo;
 import com.capstone.productcatalogservice.services.IProductService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -16,7 +20,7 @@ public class StorageProductService implements IProductService {
     private ProductRepo productRepo;
 
     @Override
-    public Product getProductById(Long id) {
+    public Product getProduct(Long id) {
         Optional<Product> optionalProduct = productRepo.findById(id);
         return optionalProduct.orElse(null);
     }
@@ -42,5 +46,12 @@ public class StorageProductService implements IProductService {
         Product product = productRepo.findById(id).orElseThrow(() -> new IllegalArgumentException("Invalid Id"));
         productRepo.delete(product);
         return true;
+    }
+
+    @Override
+    public Page<Product> searchProducts(String searchKey, Integer pageNo, Integer pageSize, String sortBy, String sortOrder) {
+        Sort.Direction direction = sortOrder.equalsIgnoreCase("desc") ? Sort.Direction.DESC : Sort.Direction.ASC;
+        Pageable pageable = PageRequest.of(pageNo, pageSize, Sort.by(direction, sortBy));
+        return productRepo.findByNameContainingIgnoreCaseOrDescriptionContainingIgnoreCase(searchKey, searchKey, pageable);
     }
 }

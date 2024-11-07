@@ -38,7 +38,7 @@ public class StorageProductServiceTest {
         when(productRepo.findById(productId)).thenReturn(Optional.of(product));
 
         //Act
-        Product productActual = productService.getProductById(productId);
+        Product productActual = productService.getProduct(productId);
 
         //Assert
         assertNotNull(productActual);

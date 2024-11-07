@@ -40,37 +40,37 @@ public class ProductControllerTest {
         category.setId(2L);
         category.setName("iPHONES");
         product.setCategory(category);
-        when(productService.getProductById(productId)).thenReturn(product);
+        when(productService.getProduct(productId)).thenReturn(product);
 
         //Act
-        ResponseEntity<ProductDto> response = productController.getProductById(productId);
+        ResponseEntity<ProductDto> response = productController.getProduct(productId);
 
         //Assert
         assertNotNull(response);
         assertEquals("Iphone12", response.getBody().getName() );
         assertEquals(response.getBody().getId(), productId);
-        verify(productService, times(1)).getProductById(productId);
+        verify(productService, times(1)).getProduct(productId);
     }
 
     @Test
-    public void Test_GetProductById_WithInvalidId_ThrowsIllegalArgumentException() {
+    public void Test_GetProduct_ThrowsIllegalArgumentException() {
         //Act and Assert
         Exception exception = assertThrows(IllegalArgumentException.class,
-                () -> productController.getProductById(-1L));
+                () -> productController.getProduct(-1L));
 
         assertEquals("Are you crazy ?", exception.getMessage());
 
-        verify(productService, times(0)).getProductById(-1L);
+        verify(productService, times(0)).getProduct(-1L);
     }
 
     @Test
     public void Test_GetProductById_ProductServiceThrowsException() {
         //Arrange
         Long productId = 2L;
-        when(productService.getProductById(productId)).
+        when(productService.getProduct(productId)).
                 thenThrow(new RuntimeException("something went bad !!"));
 
-        assertThrows(Exception.class, () -> productController.getProductById(productId));
+        assertThrows(Exception.class, () -> productController.getProduct(productId));
     }
 
     @Test
@@ -97,19 +97,19 @@ public class ProductControllerTest {
 
     @DisplayName("Passing product id as 1 to controller and expect same on product service call as well, if this assert fails, that means value was not 1")
     @Test
-    public void Test_GetProductById_ServiceCalledWithExpectedArguments_RunSuccessfully() {
+    public void Test_GetProduct_ServiceCalledWithExpectedArguments_RunSuccessfully() {
         //Arrange
         Long productId = 1L;
         Product product = new Product();
         product.setId(productId);
 
-        when(productService.getProductById(any(Long.class))).thenReturn(product);
+        when(productService.getProduct(any(Long.class))).thenReturn(product);
 
         //Act
-        productController.getProductById(productId);
+        productController.getProduct(productId);
 
         //Assert
-        verify(productService).getProductById(idCaptor.capture());
+        verify(productService).getProduct(idCaptor.capture());
         assertEquals(productId, idCaptor.getValue());
     }
 }
