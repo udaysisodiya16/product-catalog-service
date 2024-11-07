@@ -1,4 +1,4 @@
-package com.capstone.productcatalogservice.model;
+package com.capstone.productcatalogservice.models;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;

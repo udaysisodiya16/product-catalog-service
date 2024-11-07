@@ -1,4 +1,4 @@
-package com.capstone.productcatalogservice.model;
+package com.capstone.productcatalogservice.models;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;

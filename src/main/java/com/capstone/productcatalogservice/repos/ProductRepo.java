@@ -1,6 +1,6 @@
 package com.capstone.productcatalogservice.repos;
 
-import com.capstone.productcatalogservice.model.Product;
+import com.capstone.productcatalogservice.models.Product;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;

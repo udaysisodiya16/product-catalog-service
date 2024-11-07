@@ -1,4 +1,4 @@
-package com.capstone.productcatalogservice.model;
+package com.capstone.productcatalogservice.models;
 
 import jakarta.persistence.Id;
 import jakarta.persistence.MappedSuperclass;

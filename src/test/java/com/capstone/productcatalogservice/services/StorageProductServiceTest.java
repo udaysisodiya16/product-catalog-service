@@ -1,7 +1,7 @@
 package com.capstone.productcatalogservice.services;
 
-import com.capstone.productcatalogservice.model.Category;
-import com.capstone.productcatalogservice.model.Product;
+import com.capstone.productcatalogservice.models.Category;
+import com.capstone.productcatalogservice.models.Product;
 import com.capstone.productcatalogservice.repos.ProductRepo;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

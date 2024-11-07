@@ -1,6 +1,6 @@
 package com.capstone.productcatalogservice.services;
 
-import com.capstone.productcatalogservice.model.Product;
+import com.capstone.productcatalogservice.models.Product;
 
 import java.util.List;
 

@@ -2,7 +2,7 @@ package com.capstone.productcatalogservice.controllers;
 
 import com.capstone.productcatalogservice.dtos.ProductDto;
 import com.capstone.productcatalogservice.mappers.ProductMapper;
-import com.capstone.productcatalogservice.model.Product;
+import com.capstone.productcatalogservice.models.Product;
 import com.capstone.productcatalogservice.services.IProductService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;

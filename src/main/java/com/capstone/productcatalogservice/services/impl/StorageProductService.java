@@ -1,6 +1,6 @@
 package com.capstone.productcatalogservice.services.impl;
 
-import com.capstone.productcatalogservice.model.Product;
+import com.capstone.productcatalogservice.models.Product;
 import com.capstone.productcatalogservice.repos.ProductRepo;
 import com.capstone.productcatalogservice.services.IProductService;
 import org.springframework.beans.factory.annotation.Autowired;

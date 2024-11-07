@@ -1,7 +1,7 @@
 package com.capstone.productcatalogservice.mappers;
 
 import com.capstone.productcatalogservice.dtos.ProductDto;
-import com.capstone.productcatalogservice.model.Product;
+import com.capstone.productcatalogservice.models.Product;
 import org.mapstruct.Mapper;
 
 import java.util.List;
