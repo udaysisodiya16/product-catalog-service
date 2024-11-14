@@ -17,4 +17,10 @@ public class ControllerAdvisor {
         exception.printStackTrace();
         return new ResponseEntity<>(exception.getMessage(), HttpStatus.BAD_REQUEST);
     }
+
+    @ExceptionHandler({Exception.class})
+    public ResponseEntity<String> handleException(Exception exception) {
+        exception.printStackTrace();
+        return new ResponseEntity<>(exception.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+    }
 }
