@@ -1,6 +1,7 @@
 package com.capstone.productcatalogservice.services.impl;
 
 import com.capstone.productcatalogservice.models.Product;
+import com.capstone.productcatalogservice.repos.ElasticSearchProductRepository;
 import com.capstone.productcatalogservice.repos.ProductRepo;
 import com.capstone.productcatalogservice.services.IProductService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +19,9 @@ public class StorageProductService implements IProductService {
 
     @Autowired
     private ProductRepo productRepo;
+
+    @Autowired
+    private ElasticSearchProductRepository elasticSearchProductRepository;
 
     @Override
     public Product getProduct(Long id) {
