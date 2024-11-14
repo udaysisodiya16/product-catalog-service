@@ -49,9 +49,21 @@ public class StorageProductService implements IProductService {
     }
 
     @Override
-    public Page<Product> searchProducts(String searchKey, Integer pageNo, Integer pageSize, String sortBy, String sortOrder) {
+    public Page<Product> searchProducts(String searchKey, Integer pageNo, Integer pageSize, String sortBy, String sortOrder, String category) {
         Sort.Direction direction = sortOrder.equalsIgnoreCase("desc") ? Sort.Direction.DESC : Sort.Direction.ASC;
         Pageable pageable = PageRequest.of(pageNo, pageSize, Sort.by(direction, sortBy));
-        return productRepo.findByNameContainingIgnoreCaseOrDescriptionContainingIgnoreCase(searchKey, searchKey, pageable);
+        if (category != null) {
+            if (searchKey == null) {
+                return productRepo.findAllByCategory_Name(category, pageable);
+            } else {
+                return productRepo.findByCategory_NameAndNameContainingIgnoreCaseOrDescriptionContainingIgnoreCase(category, searchKey, searchKey, pageable);
+            }
+        } else {
+            if (searchKey == null) {
+                return productRepo.findAll(pageable);
+            } else {
+                return productRepo.findByNameContainingIgnoreCaseOrDescriptionContainingIgnoreCase(searchKey, searchKey, pageable);
+            }
+        }
     }
 }

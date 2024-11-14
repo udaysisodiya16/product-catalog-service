@@ -9,7 +9,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -65,12 +64,13 @@ public class ProductController {
     }
 
     @GetMapping("/search")
-    public ResponseEntity<Page<ProductDto>> searchProducts(@RequestParam String searchKey,
-                                                           @RequestParam(defaultValue = "0") Integer pageNo,
-                                                           @RequestParam(defaultValue = "10") Integer pageSize,
-                                                           @RequestParam(defaultValue = "name") String sortBy,
-                                                           @RequestParam(defaultValue = "asc") String sortOrder) {
-        Page<Product> productPage = productService.searchProducts(searchKey, pageNo, pageSize, sortBy, sortOrder);
+    public ResponseEntity<Page<ProductDto>> searchProducts(@RequestParam(required = false) String searchKey,
+                                                           @RequestParam(defaultValue = "0", required = false) Integer pageNo,
+                                                           @RequestParam(defaultValue = "10", required = false) Integer pageSize,
+                                                           @RequestParam(defaultValue = "name", required = false) String sortBy,
+                                                           @RequestParam(defaultValue = "asc", required = false) String sortOrder,
+                                                           @RequestParam(required = false) String category) {
+        Page<Product> productPage = productService.searchProducts(searchKey, pageNo, pageSize, sortBy, sortOrder, category);
         return ResponseEntity.ok(productPage.map(productMapper::productToProductDto));
     }
 }
