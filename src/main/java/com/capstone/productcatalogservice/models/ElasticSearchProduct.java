@@ -21,9 +21,5 @@ public class ElasticSearchProduct {
     @Field(type = FieldType.Text)
     private String description;
 
-    @Field(type = FieldType.Double)
-    private double price;
-
-    // Add additional fields and getters/setters as necessary
 }
 

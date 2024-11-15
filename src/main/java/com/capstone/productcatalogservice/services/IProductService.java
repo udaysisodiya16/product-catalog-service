@@ -1,5 +1,6 @@
 package com.capstone.productcatalogservice.services;
 
+import com.capstone.productcatalogservice.models.ElasticSearchProduct;
 import com.capstone.productcatalogservice.models.Product;
 import org.springframework.data.domain.Page;
 
@@ -17,6 +18,7 @@ public interface IProductService {
 
     Boolean deleteProduct(Long id);
 
-    Page<Product> searchProducts(String searchKey, Integer pageNo, Integer pageSize, String sortBy,
-                                 String sortOrder, String category);
+    Page<Product> searchProductsByCategory(String searchKey, Integer pageNo, Integer pageSize, String sortOrder, String category);
+
+    Page<ElasticSearchProduct> searchProducts(String searchKey, Integer pageNo, Integer pageSize, String sortOrder);
 }

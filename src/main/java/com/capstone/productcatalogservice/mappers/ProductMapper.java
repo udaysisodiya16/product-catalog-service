@@ -1,6 +1,7 @@
 package com.capstone.productcatalogservice.mappers;
 
 import com.capstone.productcatalogservice.dtos.ProductDto;
+import com.capstone.productcatalogservice.models.ElasticSearchProduct;
 import com.capstone.productcatalogservice.models.Product;
 import org.mapstruct.Mapper;
 
@@ -14,4 +15,6 @@ public interface ProductMapper {
     Product productDtoToProduct(ProductDto productDto);
 
     ProductDto productToProductDto(Product result);
+
+    ProductDto elasticSearchProductToProductDto(ElasticSearchProduct elasticSearchProduct);
 }

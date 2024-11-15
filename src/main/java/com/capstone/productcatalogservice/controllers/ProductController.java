@@ -2,8 +2,10 @@ package com.capstone.productcatalogservice.controllers;
 
 import com.capstone.productcatalogservice.dtos.ProductDto;
 import com.capstone.productcatalogservice.mappers.ProductMapper;
+import com.capstone.productcatalogservice.models.ElasticSearchProduct;
 import com.capstone.productcatalogservice.models.Product;
 import com.capstone.productcatalogservice.services.IProductService;
+import jakarta.validation.constraints.NotBlank;
 import org.mapstruct.factory.Mappers;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -63,14 +65,23 @@ public class ProductController {
         return ResponseEntity.ok(status);
     }
 
-    @GetMapping("/search")
-    public ResponseEntity<Page<ProductDto>> searchProducts(@RequestParam(required = false) String searchKey,
-                                                           @RequestParam(defaultValue = "0", required = false) Integer pageNo,
-                                                           @RequestParam(defaultValue = "10", required = false) Integer pageSize,
-                                                           @RequestParam(defaultValue = "name", required = false) String sortBy,
-                                                           @RequestParam(defaultValue = "asc", required = false) String sortOrder,
-                                                           @RequestParam(required = false) String category) {
-        Page<Product> productPage = productService.searchProducts(searchKey, pageNo, pageSize, sortBy, sortOrder, category);
+    @GetMapping("/searchByCategory")
+    public ResponseEntity<Page<ProductDto>> searchProductsByCategory(@RequestParam(required = false) String searchKey,
+                                                                     @RequestParam(defaultValue = "0", required = false) Integer pageNo,
+                                                                     @RequestParam(defaultValue = "10", required = false) Integer pageSize,
+                                                                     @RequestParam(defaultValue = "asc", required = false) String sortOrder,
+                                                                     @RequestParam @NotBlank String category) {
+        Page<Product> productPage = productService.searchProductsByCategory(searchKey, pageNo, pageSize, sortOrder, category);
         return ResponseEntity.ok(productPage.map(productMapper::productToProductDto));
     }
+
+    @GetMapping("/search")
+    public ResponseEntity<Page<ProductDto>> searchProducts(@RequestParam String searchKey,
+                                                           @RequestParam(defaultValue = "0", required = false) Integer pageNo,
+                                                           @RequestParam(defaultValue = "10", required = false) Integer pageSize,
+                                                           @RequestParam(defaultValue = "asc", required = false) String sortOrder) {
+        Page<ElasticSearchProduct> elasticSearchProductPage = productService.searchProducts(searchKey, pageNo, pageSize, sortOrder);
+        return ResponseEntity.ok(elasticSearchProductPage.map(productMapper::elasticSearchProductToProductDto));
+    }
+
 }

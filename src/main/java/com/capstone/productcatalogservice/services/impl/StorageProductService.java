@@ -1,5 +1,6 @@
 package com.capstone.productcatalogservice.services.impl;
 
+import com.capstone.productcatalogservice.models.ElasticSearchProduct;
 import com.capstone.productcatalogservice.models.Product;
 import com.capstone.productcatalogservice.repos.ElasticSearchProductRepository;
 import com.capstone.productcatalogservice.repos.ProductRepo;
@@ -53,21 +54,20 @@ public class StorageProductService implements IProductService {
     }
 
     @Override
-    public Page<Product> searchProducts(String searchKey, Integer pageNo, Integer pageSize, String sortBy, String sortOrder, String category) {
+    public Page<Product> searchProductsByCategory(String searchKey, Integer pageNo, Integer pageSize, String sortOrder, String category) {
         Sort.Direction direction = sortOrder.equalsIgnoreCase("desc") ? Sort.Direction.DESC : Sort.Direction.ASC;
-        Pageable pageable = PageRequest.of(pageNo, pageSize, Sort.by(direction, sortBy));
-        if (category != null) {
-            if (searchKey == null) {
-                return productRepo.findAllByCategory_Name(category, pageable);
-            } else {
-                return productRepo.findByCategory_NameAndNameContainingIgnoreCaseOrDescriptionContainingIgnoreCase(category, searchKey, searchKey, pageable);
-            }
+        Pageable pageable = PageRequest.of(pageNo, pageSize, direction);
+        if (searchKey == null) {
+            return productRepo.findAllByCategory_Name(category, pageable);
         } else {
-            if (searchKey == null) {
-                return productRepo.findAll(pageable);
-            } else {
-                return productRepo.findByNameContainingIgnoreCaseOrDescriptionContainingIgnoreCase(searchKey, searchKey, pageable);
-            }
+            return productRepo.findByCategory_NameAndNameContainingIgnoreCaseOrDescriptionContainingIgnoreCase(category, searchKey, searchKey, pageable);
         }
+    }
+
+    @Override
+    public Page<ElasticSearchProduct> searchProducts(String searchKey, Integer pageNo, Integer pageSize, String sortOrder) {
+        Sort.Direction direction = sortOrder.equalsIgnoreCase("desc") ? Sort.Direction.DESC : Sort.Direction.ASC;
+        Pageable pageable = PageRequest.of(pageNo, pageSize, direction);
+        return elasticSearchProductRepository.findByNameContainingOrDescriptionContaining(searchKey, searchKey, pageable);
     }
 }
