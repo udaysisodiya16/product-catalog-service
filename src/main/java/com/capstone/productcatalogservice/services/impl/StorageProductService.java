@@ -50,6 +50,11 @@ public class StorageProductService implements IProductService {
     }
 
     @Override
+    public List<Product> getAllProductsByIds(List<Long> productIds) {
+        return productRepo.findAllById(productIds);
+    }
+
+    @Override
     public Product replaceProduct(Product product, Long id) {
         productRepo.findById(id).orElseThrow(() -> new IllegalArgumentException("Invalid Id"));
         Product savedProduct = productRepo.save(product);
@@ -82,7 +87,7 @@ public class StorageProductService implements IProductService {
     @Override
     public Page<ElasticSearchProduct> searchProducts(String searchKey, Integer pageNo, Integer pageSize, String sortBy, String sortOrder) {
         Sort.Direction direction = sortOrder.equalsIgnoreCase("desc") ? Sort.Direction.DESC : Sort.Direction.ASC;
-        Pageable pageable = PageRequest.of(pageNo, pageSize, Sort.by(direction, sortBy));
-        return elasticSearchProductRepo.findByNameContainingOrDescriptionContaining(searchKey, searchKey, pageable);
+        Pageable pageable = PageRequest.of(pageNo, pageSize);
+        return elasticSearchProductRepo.findByNameContainingIgnoreCaseOrDescriptionContainingIgnoreCase(searchKey, searchKey, pageable);
     }
 }

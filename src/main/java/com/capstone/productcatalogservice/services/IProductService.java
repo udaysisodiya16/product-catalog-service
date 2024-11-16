@@ -14,11 +14,14 @@ public interface IProductService {
 
     List<Product> getAllProducts();
 
+    List<Product> getAllProductsByIds(List<Long> productIds);
+
     Product replaceProduct(Product product, Long id);
 
     Boolean deleteProduct(Long id);
 
     Page<Product> searchProductsByCategory(String searchKey, Integer pageNo, Integer pageSize, String sortBy, String sortOrder, String category);
 
-    Page<ElasticSearchProduct> searchProducts(String searchKey, Integer pageNo, Integer pageSize,String sortBy, String sortOrder);
+    Page<ElasticSearchProduct> searchProducts(String searchKey, Integer pageNo, Integer pageSize, String sortBy, String sortOrder);
+
 }

@@ -10,5 +10,5 @@ import org.springframework.stereotype.Repository;
 public interface ElasticSearchProductRepo extends ElasticsearchRepository<ElasticSearchProduct, String> {
 
     // Custom query method to search products by name or description
-    Page<ElasticSearchProduct> findByNameContainingOrDescriptionContaining(String name, String description, Pageable pageable);
+    Page<ElasticSearchProduct> findByNameContainingIgnoreCaseOrDescriptionContainingIgnoreCase(String name, String description, Pageable pageable);
 }
