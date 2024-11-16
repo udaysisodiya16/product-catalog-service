@@ -17,4 +17,6 @@ public interface ProductMapper {
     ProductDto productToProductDto(Product result);
 
     ProductDto elasticSearchProductToProductDto(ElasticSearchProduct elasticSearchProduct);
+
+    ElasticSearchProduct productToElasticSearchProduct(Product savedProduct);
 }

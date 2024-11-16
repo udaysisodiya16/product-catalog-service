@@ -18,7 +18,7 @@ public interface IProductService {
 
     Boolean deleteProduct(Long id);
 
-    Page<Product> searchProductsByCategory(String searchKey, Integer pageNo, Integer pageSize, String sortOrder, String category);
+    Page<Product> searchProductsByCategory(String searchKey, Integer pageNo, Integer pageSize, String sortBy, String sortOrder, String category);
 
-    Page<ElasticSearchProduct> searchProducts(String searchKey, Integer pageNo, Integer pageSize, String sortOrder);
+    Page<ElasticSearchProduct> searchProducts(String searchKey, Integer pageNo, Integer pageSize,String sortBy, String sortOrder);
 }

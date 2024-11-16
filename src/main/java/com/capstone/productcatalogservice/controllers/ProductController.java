@@ -69,9 +69,10 @@ public class ProductController {
     public ResponseEntity<Page<ProductDto>> searchProductsByCategory(@RequestParam(required = false) String searchKey,
                                                                      @RequestParam(defaultValue = "0", required = false) Integer pageNo,
                                                                      @RequestParam(defaultValue = "10", required = false) Integer pageSize,
+                                                                     @RequestParam(defaultValue = "name", required = false) String sortBy,
                                                                      @RequestParam(defaultValue = "asc", required = false) String sortOrder,
                                                                      @RequestParam @NotBlank String category) {
-        Page<Product> productPage = productService.searchProductsByCategory(searchKey, pageNo, pageSize, sortOrder, category);
+        Page<Product> productPage = productService.searchProductsByCategory(searchKey, pageNo, pageSize, sortBy, sortOrder, category);
         return ResponseEntity.ok(productPage.map(productMapper::productToProductDto));
     }
 
@@ -79,8 +80,9 @@ public class ProductController {
     public ResponseEntity<Page<ProductDto>> searchProducts(@RequestParam String searchKey,
                                                            @RequestParam(defaultValue = "0", required = false) Integer pageNo,
                                                            @RequestParam(defaultValue = "10", required = false) Integer pageSize,
+                                                           @RequestParam(defaultValue = "name", required = false) String sortBy,
                                                            @RequestParam(defaultValue = "asc", required = false) String sortOrder) {
-        Page<ElasticSearchProduct> elasticSearchProductPage = productService.searchProducts(searchKey, pageNo, pageSize, sortOrder);
+        Page<ElasticSearchProduct> elasticSearchProductPage = productService.searchProducts(searchKey, pageNo, pageSize, sortBy, sortOrder);
         return ResponseEntity.ok(elasticSearchProductPage.map(productMapper::elasticSearchProductToProductDto));
     }
 
