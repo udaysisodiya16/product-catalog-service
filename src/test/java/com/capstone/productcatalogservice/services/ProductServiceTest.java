@@ -15,7 +15,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.*;
 
 @SpringBootTest
-public class StorageProductServiceTest {
+public class ProductServiceTest {
 
     @Autowired
     private IProductService productService;

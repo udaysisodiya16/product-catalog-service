@@ -19,7 +19,7 @@ import java.util.Optional;
 
 @Service
 @Transactional
-public class StorageProductService implements IProductService {
+public class ProductService implements IProductService {
 
     @Autowired
     private ProductRepo productRepo;
