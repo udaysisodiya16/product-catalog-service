@@ -26,9 +26,9 @@ public class SwaggerConfig {
         server.setDescription("Server URL");
         return new OpenAPI()
                 .info(new Info()
-                        .title("Capstone Project APIs")
+                        .title("product-catalog-service APIs")
                         .version("1.0")
-                        .description("This is a sample Spring Boot RESTful service using springdoc-openapi-starter-webmvc-ui."))
+                        .description("This is a product-catalog-service Spring Boot RESTful service using springdoc-openapi-starter-webmvc-ui."))
                 .servers(List.of(server));
     }
 }
