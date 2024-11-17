@@ -33,7 +33,7 @@ public class StorageProductService implements IProductService {
     @Override
     public Product getProduct(Long id) {
         Optional<Product> optionalProduct = productRepo.findById(id);
-        return optionalProduct.orElse(null);
+        return optionalProduct.orElseThrow(() -> new IllegalArgumentException("Product not found"));
     }
 
     @Override
