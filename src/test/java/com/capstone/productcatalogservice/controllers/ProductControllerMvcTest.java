@@ -1,7 +1,9 @@
 package com.capstone.productcatalogservice.controllers;
 
+import com.capstone.productcatalogservice.dtos.CategoryDto;
 import com.capstone.productcatalogservice.dtos.ProductDto;
 import com.capstone.productcatalogservice.mappers.ProductMapper;
+import com.capstone.productcatalogservice.models.Category;
 import com.capstone.productcatalogservice.models.Product;
 import com.capstone.productcatalogservice.services.IProductService;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -84,12 +86,22 @@ public class ProductControllerMvcTest {
     public void Test_CreateProduct_ProductCreatedSuccessfully() throws Exception {
         //Arrange
         ProductDto productDto = new ProductDto();
-        productDto.setName("MacBook");
         productDto.setId(10L);
+        productDto.setName("MacBook");
+        productDto.setDescription("MacBook Desc");
+        productDto.setPrice(10000.0);
+        CategoryDto categoryDto = new CategoryDto();
+        categoryDto.setName("Mobile");
+        productDto.setCategory(categoryDto);
 
         Product product = new Product();
-        product.setName("MacBook");
         product.setId(10L);
+        product.setName("MacBook");
+        product.setDescription("MacBook Desc");
+        product.setPrice(10000.0);
+        Category category = new Category();
+        category.setName("Mobile");
+        product.setCategory(category);
 
         when(productService.createProduct(any(Product.class))).thenReturn(product);
 
@@ -106,8 +118,13 @@ public class ProductControllerMvcTest {
     public void Test_CreateProduct_ProductCreatedSuccessfully_AssertInJsons() throws Exception {
         //Arrange
         ProductDto productDto = new ProductDto();
-        productDto.setName("MacBook");
         productDto.setId(10L);
+        productDto.setName("MacBook");
+        productDto.setDescription("MacBook Desc");
+        productDto.setPrice(10000.0);
+        CategoryDto categoryDto = new CategoryDto();
+        categoryDto.setName("Mobile");
+        productDto.setCategory(categoryDto);
 
         when(productService.createProduct(any(Product.class))).thenReturn(productMapper.productDtoToProduct(productDto));
 
