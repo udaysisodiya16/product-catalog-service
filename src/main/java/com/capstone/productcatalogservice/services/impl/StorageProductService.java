@@ -95,7 +95,7 @@ public class StorageProductService implements IProductService {
     @Override
     public Page<ElasticSearchProduct> searchProductsWithFuzziness(String searchKey, Integer pageNo, Integer pageSize, String sortBy, String sortOrder) {
         Sort.Direction direction = sortOrder.equalsIgnoreCase("desc") ? Sort.Direction.DESC : Sort.Direction.ASC;
-        Pageable pageable = PageRequest.of(pageNo, pageSize);
-        return elasticSearchProductRepo.findByNameContainingIgnoreCaseOrDescriptionContainingIgnoreCase(searchKey, searchKey, pageable);
+        Pageable pageable = PageRequest.of(pageNo, pageSize, Sort.by(direction, sortBy));
+        return elasticSearchProductRepo.searchProductsWithFuzziness(searchKey, pageable);
     }
 }
