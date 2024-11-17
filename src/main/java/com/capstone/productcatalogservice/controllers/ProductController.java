@@ -6,7 +6,7 @@ import com.capstone.productcatalogservice.mappers.ProductMapper;
 import com.capstone.productcatalogservice.models.ElasticSearchProduct;
 import com.capstone.productcatalogservice.models.Product;
 import com.capstone.productcatalogservice.services.IProductService;
-import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.Valid;
 import org.mapstruct.factory.Mappers;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -53,14 +53,14 @@ public class ProductController {
     }
 
     @PostMapping
-    public ResponseEntity<ProductDto> createProduct(@RequestBody ProductDto productDto) {
+    public ResponseEntity<ProductDto> createProduct(@RequestBody @Valid ProductDto productDto) {
         Product product = productMapper.productDtoToProduct(productDto);
         Product result = productService.createProduct(product);
         return ResponseEntity.ok(productMapper.productToProductDto(result));
     }
 
     @PutMapping("{id}")
-    public ResponseEntity<ProductDto> replaceProduct(@PathVariable Long id, @RequestBody ProductDto productDto) {
+    public ResponseEntity<ProductDto> replaceProduct(@PathVariable Long id, @RequestBody @Valid ProductDto productDto) {
         Product input = productMapper.productDtoToProduct(productDto);
         Product product = productService.replaceProduct(input, id);
         return ResponseEntity.ok(productMapper.productToProductDto(product));

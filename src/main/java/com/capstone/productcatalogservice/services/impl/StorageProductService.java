@@ -57,6 +57,7 @@ public class StorageProductService implements IProductService {
     @Override
     public Product replaceProduct(Product product, Long id) {
         productRepo.findById(id).orElseThrow(() -> new IllegalArgumentException("Invalid Id"));
+        product.setId(id);
         Product savedProduct = productRepo.save(product);
         ElasticSearchProduct elasticSearchProduct = productMapper.productToElasticSearchProduct(savedProduct);
         elasticSearchProductRepo.save(elasticSearchProduct);
