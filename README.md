@@ -46,7 +46,8 @@ searching. It uses MySQL for data persistence.
       ```
 
 3. **Elasticsearch Configuration**
-    - Start Elasticsearch on `localhost:9200`. Adjust configurations in `application.properties` if using a different
+    - Start Elasticsearch on `localhost:9200` using `.\bin\elasticsearch.bat` command . Adjust configurations in
+      `application.properties` if using a different
       setup.
     - Update the Elasticsearch configurations in `src/main/resources/application.properties`:
    ```properties
